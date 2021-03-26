@@ -1,0 +1,60 @@
+---
+title: "WHO TB rates by country 1995-2013"
+author: "Elisa Chaudet"
+date: "18/03/2021"
+output:
+  word_document: default
+  html_document: null
+---
+
+This is the evaluation of the data provided by the WHO on TB between 1995-2013.
+
+```{r}
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+library(rmarkdown)
+
+who <- read.csv("who.csv")
+who$total = rowSums(who[,6:61], na.rm=TRUE)
+
+# Plot
+#ggplot(data, aes(x=xValue, y=yValue)) + geom_line()
+
+
+filteredByTotal <- filter(who, total > 0)
+
+ggplot(subset(filteredByTotal, country %in% c("Afghanistan", "Iraq", "Yemen")), aes(x = year, y = total, color=country)) + 
+    geom_line() +
+    ggtitle("Total Cases of Tuberculosis Between 1995-2013") +
+    ylab("Number of cases")
+ggsave("all_countries.png")
+
+
+ggplot(subset(filteredByTotal, country %in% c("Netherlands", "Ireland", "France")), aes(x = year, y = total, color=country)) +
+    geom_line() +
+    ggtitle("Total Cases of Tuberculosis Between 1995-2013") +
+    ylab("Number of cases")
+ggsave("all_countries.png")
+
+
+ggplot(subset(filteredByTotal, country %in% c("Lithuania", "Belarus", "Ukraine")), aes(x = year, y = total, color=country)) + 
+    geom_line() +
+    ggtitle("Total Cases of Tuberculosis Between 1995-2013") +
+    ylab("Number of cases")
+ggsave("all_countries.png")
+
+
+
+#result <- aggregate(x = who$total, by = list(who$country), FUN = sum)
+#x = result$Group.1
+#y = as.numeric(result$x)
+
+
+#barplot(as.matrix(result$x), main="Total Cases", ylab= "Total", beside=TRUE, col=rainbow(5))
+
+
+
+```
+
